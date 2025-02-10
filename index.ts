@@ -92,10 +92,14 @@ app.put(API_PATHS.VIDEO_BY_ID, (req: Request, res: Response) => {
 
     const errors: { message: string, field: string }[] = [];
 
-
     if (!req.body.title || typeof req.body.title !== 'string') {
         errors.push({
             message: "Title is required and should be a string",
+            field: "title"
+        });
+    } else if (req.body.title.length > 40) {
+        errors.push({
+            message: "Title length should not exceed 40 characters",
             field: "title"
         });
     }
@@ -104,6 +108,16 @@ app.put(API_PATHS.VIDEO_BY_ID, (req: Request, res: Response) => {
         errors.push({
             message: "canBeDownloaded should be boolean",
             field: "canBeDownloaded"
+        });
+    }
+
+    if (req.body.minAgeRestriction !== null &&
+        (typeof req.body.minAgeRestriction !== 'number' ||
+            req.body.minAgeRestriction < 1 ||
+            req.body.minAgeRestriction > 18)) {
+        errors.push({
+            message: "minAgeRestriction should be null or number between 1 and 18",
+            field: "minAgeRestriction"
         });
     }
 
