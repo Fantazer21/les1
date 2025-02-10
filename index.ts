@@ -6,6 +6,17 @@ enum API_PATHS {
     VIDEO_BY_ID = '/videos/:id'
 }
 
+enum Resolution {
+    P144 = 'P144',
+    P240 = 'P240',
+    P360 = 'P360',
+    P480 = 'P480',
+    P720 = 'P720',
+    P1080 = 'P1080',
+    P1440 = 'P1440',
+    P2160 = 'P2160'
+}
+
 const app: Express = express.default();
 const port: number = Number(process.env.PORT) || 3000;
 
@@ -63,6 +74,16 @@ app.post(API_PATHS.VIDEOS, (req: Request, res: Response) => {
             message: "Author should be a string with length less than 20",
             field: "author"
         });
+    }
+
+    if (req.body.availableResolutions && Array.isArray(req.body.availableResolutions)) {
+        const isValidResolutions = req.body.availableResolutions.every((r: Resolution) => Object.values(Resolution).includes(r));
+        if (!isValidResolutions) {
+            errors.push({
+                message: "Available resolutions should be valid",
+                field: "availableResolutions"
+            });
+        }
     }
 
     if (errors.length) {
