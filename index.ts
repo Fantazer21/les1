@@ -10,7 +10,6 @@ enum API_PATHS {
 
 const app: Express = express.default();
 const port: number = Number(process.env.PORT) || 3000;
-const host: string = process.env.HOST || 'localhost';
 
 let videos = [
     { id: 1, title: "Video 1", author: "Author 1" },
@@ -23,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static('public'));
 
-app.get(API_PATHS.VIDEOS, (_req: Request, res: Response) => {
+app.get(API_PATHS.VIDEOS, (req: Request, res: Response) => {
     res.json(videos);
 });
 
@@ -82,6 +81,6 @@ app.delete(API_PATHS.VIDEO_BY_ID, (req: Request, res: Response) => {
     res.sendStatus(204);
 });
 
-app.listen(port, host, () => {
-    console.log(`Сервер запущен на http://${host}:${port}`);
+app.listen(port, () => {
+    console.log(`Сервер запущен на порту ${port}`);
 });
