@@ -51,6 +51,11 @@ app.post(API_PATHS.VIDEOS, (req: Request, res: Response) => {
             message: "Title is required and should be a string",
             field: "title"
         });
+    } else if (req.body.title.length > 40) {
+        errors.push({
+            message: "Title length should not exceed 40 characters",
+            field: "title"
+        });
     }
 
     if (errors.length) {
@@ -82,6 +87,28 @@ app.put(API_PATHS.VIDEO_BY_ID, (req: Request, res: Response) => {
 
     if (videoIndex === -1) {
         res.sendStatus(404);
+        return;
+    }
+
+    const errors: { message: string, field: string }[] = [];
+
+
+    if (!req.body.title || typeof req.body.title !== 'string') {
+        errors.push({
+            message: "Title is required and should be a string",
+            field: "title"
+        });
+    }
+
+    if (req.body.canBeDownloaded !== undefined && typeof req.body.canBeDownloaded !== 'boolean') {
+        errors.push({
+            message: "canBeDownloaded should be boolean",
+            field: "canBeDownloaded"
+        });
+    }
+
+    if (errors.length) {
+        res.status(400).json({ errorsMessages: errors });
         return;
     }
 
