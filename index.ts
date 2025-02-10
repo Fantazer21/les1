@@ -3,7 +3,8 @@ import { Express, Request, Response } from 'express';
 
 enum API_PATHS {
     VIDEOS = '/videos',
-    VIDEO_BY_ID = '/videos/:id'
+    VIDEO_BY_ID = '/videos/:id',
+    TESTING = '/testing/all-data'
 }
 
 enum Resolution {
@@ -192,6 +193,11 @@ app.delete(API_PATHS.VIDEO_BY_ID, (req: Request, res: Response) => {
     }
 
     videos = videos.filter(v => v.id !== id);
+    res.sendStatus(204);
+});
+
+app.delete(API_PATHS.TESTING, (_req: Request, res: Response) => {
+    videos = [];
     res.sendStatus(204);
 });
 
