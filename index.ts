@@ -85,14 +85,18 @@ app.put(API_PATHS.VIDEO_BY_ID, (req: Request, res: Response) => {
         return;
     }
 
-    const updatedVideo = {
+    const updatedVideo: Video = {
         ...videos[videoIndex],
         title: req.body.title,
-        author: req.body.author
+        author: req.body.author,
+        canBeDownloaded: req.body.canBeDownloaded,
+        minAgeRestriction: req.body.minAgeRestriction,
+        publicationDate: req.body.publicationDate,
+        availableResolutions: req.body.availableResolutions
     };
 
     videos = [...videos.slice(0, videoIndex), updatedVideo, ...videos.slice(videoIndex + 1)];
-    res.json(updatedVideo);
+    res.sendStatus(204);
 });
 
 app.delete(API_PATHS.VIDEO_BY_ID, (req: Request, res: Response) => {
