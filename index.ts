@@ -9,17 +9,17 @@ enum API_PATHS {
 const app: Express = express.default();
 const port: number = Number(process.env.PORT) || 3000;
 
-let videos = [
-    { id: 1, title: "Video 1", author: "Author 1" },
-    { id: 2, title: "Video 2", author: "Author 2" },
-    { id: 3, title: "Video 3", author: "Author 3" }
-];
+let videos: Video[] = [];
 
 interface Video {
     id: number;
     title: string;
     author: string;
-    availableResolutions?: string[];
+    canBeDownloaded: boolean;
+    minAgeRestriction: number | null;
+    createdAt: string;
+    publicationDate: string;
+    availableResolutions: string[];
 }
 
 app.use(express.json());
@@ -58,11 +58,18 @@ app.post(API_PATHS.VIDEOS, (req: Request, res: Response) => {
         return;
     }
 
+    const createdAt = new Date().toISOString();
+    const publicationDate = new Date(Date.now() + 86400000).toISOString();
+
     const newVideo: Video = {
         id: +(new Date()),
         title: req.body.title,
         author: req.body.author,
-        availableResolutions: req.body.availableResolutions
+        canBeDownloaded: false,
+        minAgeRestriction: null,
+        createdAt,
+        publicationDate,
+        availableResolutions: req.body.availableResolutions || []
     };
 
     videos = [...videos, newVideo];
