@@ -104,6 +104,13 @@ app.put(API_PATHS.VIDEO_BY_ID, (req: Request, res: Response) => {
         });
     }
 
+    if (!req.body.author || typeof req.body.author !== 'string' || req.body.author.length > 20) {
+        errors.push({
+            message: "Author should be a string with length less than 20",
+            field: "author"
+        });
+    }
+
     if (req.body.canBeDownloaded !== undefined && typeof req.body.canBeDownloaded !== 'boolean') {
         errors.push({
             message: "canBeDownloaded should be boolean",
@@ -118,6 +125,13 @@ app.put(API_PATHS.VIDEO_BY_ID, (req: Request, res: Response) => {
         errors.push({
             message: "minAgeRestriction should be null or number between 1 and 18",
             field: "minAgeRestriction"
+        });
+    }
+
+    if (!req.body.publicationDate || typeof req.body.publicationDate !== 'string' || isNaN(Date.parse(req.body.publicationDate))) {
+        errors.push({
+            message: "publicationDate should be a valid ISO string",
+            field: "publicationDate"
         });
     }
 
