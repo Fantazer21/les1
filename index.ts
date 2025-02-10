@@ -58,6 +58,13 @@ app.post(API_PATHS.VIDEOS, (req: Request, res: Response) => {
         });
     }
 
+    if (!req.body.author || typeof req.body.author !== 'string' || req.body.author.length > 20) {
+        errors.push({
+            message: "Author should be a string with length less than 20",
+            field: "author"
+        });
+    }
+
     if (errors.length) {
         res.status(400).json({ errorsMessages: errors });
         return;
