@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 3,
   "name": "lesson-1",
   "builds": [
     { "src": "index.ts", "use": "@vercel/node" }
