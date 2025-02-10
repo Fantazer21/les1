@@ -41,16 +41,12 @@ var API_PATHS;
 })(API_PATHS || (API_PATHS = {}));
 const app = express.default();
 const port = Number(process.env.PORT) || 3000;
-const host = process.env.HOST || 'localhost';
 let videos = [
     { id: 1, title: "Video 1", author: "Author 1" },
     { id: 2, title: "Video 2", author: "Author 2" },
     { id: 3, title: "Video 3", author: "Author 3" }
 ];
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
-app.get(API_PATHS.VIDEOS, (_req, res) => {
+app.get(API_PATHS.VIDEOS, (req, res) => {
     res.json(videos);
 });
 app.get(API_PATHS.VIDEO_BY_ID, (req, res) => {
@@ -92,6 +88,6 @@ app.delete(API_PATHS.VIDEO_BY_ID, (req, res) => {
     videos = videos.filter(v => v.id !== id);
     res.sendStatus(204);
 });
-app.listen(port, host, () => {
-    console.log(`Сервер запущен на http://${host}:${port}`);
+app.listen(port, () => {
+    console.log(`Сервер запущен на порту ${port}`);
 });

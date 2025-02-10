@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static('public'));
 
-app.get(API_PATHS.VIDEOS, (req: Request, res: Response) => {
+app.get(API_PATHS.VIDEOS, (_req: Request, res: Response) => {
     res.json(videos);
 });
 
@@ -39,6 +39,20 @@ app.get(API_PATHS.VIDEO_BY_ID, (req: Request, res: Response) => {
 });
 
 app.post(API_PATHS.VIDEOS, (req: Request, res: Response) => {
+    const errors: { message: string, field: string }[] = [];
+
+    if (!req.body.title || typeof req.body.title !== 'string') {
+        errors.push({
+            message: "Title is required and should be a string",
+            field: "title"
+        });
+    }
+
+    if (errors.length) {
+        res.status(400).json({ errorsMessages: errors });
+        return;
+    }
+
     const newVideo = {
         id: +(new Date()),
         title: req.body.title,
