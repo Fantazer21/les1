@@ -1,11 +1,9 @@
 import * as express from 'express';
 import { Express, Request, Response } from 'express';
 
-
-
 enum API_PATHS {
-    VIDEOS = '/hometask_01/api/videos',
-    VIDEO_BY_ID = '/hometask_01/api/videos/:id'
+    VIDEOS = '/videos',
+    VIDEO_BY_ID = '/videos/:id'
 }
 
 const app: Express = express.default();
@@ -16,6 +14,13 @@ let videos = [
     { id: 2, title: "Video 2", author: "Author 2" },
     { id: 3, title: "Video 3", author: "Author 3" }
 ];
+
+interface Video {
+    id: number;
+    title: string;
+    author: string;
+    availableResolutions?: string[];
+}
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -53,10 +58,11 @@ app.post(API_PATHS.VIDEOS, (req: Request, res: Response) => {
         return;
     }
 
-    const newVideo = {
+    const newVideo: Video = {
         id: +(new Date()),
         title: req.body.title,
-        author: req.body.author
+        author: req.body.author,
+        availableResolutions: req.body.availableResolutions
     };
 
     videos = [...videos, newVideo];
